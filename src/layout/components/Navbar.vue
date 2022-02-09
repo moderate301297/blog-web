@@ -38,13 +38,13 @@
     >
       <el-form ref="form" label-position="left" :model="form" :rules="rules">
         <el-form-item prop="oldpwd">
-          <el-input v-model="form.oldpwd" placeholder="输入原密码"/>
+          <el-input v-model="form.oldpwd" placeholder="输入原密码" />
         </el-form-item>
         <el-form-item prop="newpwd">
-          <el-input v-model="form.newpwd" placeholder="输入新密码"/>
+          <el-input v-model="form.newpwd" placeholder="输入新密码" />
         </el-form-item>
         <el-form-item prop="newpwd2">
-          <el-input v-model="form.newpwd2" placeholder="确认密码"/>
+          <el-input v-model="form.newpwd2" placeholder="确认密码" />
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">

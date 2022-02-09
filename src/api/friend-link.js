@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 /**
- * 保存友链
+ *
  * @data {Object} data
  */
 export function saveFriendLink(data) {
@@ -9,7 +9,7 @@ export function saveFriendLink(data) {
 }
 
 /**
- * 分页获取友链
+ *
  * @param {Object} params
  */
 export function pageFriendLink(params) {
@@ -17,14 +17,14 @@ export function pageFriendLink(params) {
 }
 
 /**
- * 友链列表
+ *
  */
 export function listFriendLink() {
   return request.get('/friend/link/list')
 }
 
 /**
- * 删除友链
+ *
  * @param {Number} id
  */
 export function deleteFriendLink(id) {

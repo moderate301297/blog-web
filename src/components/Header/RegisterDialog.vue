@@ -8,43 +8,37 @@
     :close-on-click-modal="false"
     :lock-scroll="false"
   >
-    <el-input v-model="username" placeholder="Input username(2-16 characters)" />
-    <el-input v-model="mobile" placeholder="input number phone" />
-    <el-input v-model="code" placeholder="Input code">
-      <span v-show="!codeCount" slot="suffix" class="code-btn btn" @click="sendCode">send Code</span>
-      <el-button
-        v-show="codeCount"
-        slot="suffix"
-        type="primary"
-        size="mini"
-        disabled
-        style="margin-top: 6px;"
-      >{{ codeCount }}s</el-button>
-    </el-input>
+    <el-input
+      v-model="username"
+      placeholder="Input username(2-16 characters)"
+    />
+    <el-input v-model="email" placeholder="input email" />
     <el-input v-model="password" placeholder="Input password" />
-    <el-button type="primary" size="medium" :loading="loading" @click="submit">Submit</el-button>
-    <p>Note: Agree to display immediately after registration
-    <span style="color: #007fff;">
-      <span class="btn" @click="terms">User</span>
-      <span class="btn" @click="privacy">Sercurity Policy</span>
-    </span>
+    <el-button
+      type="primary"
+      size="medium"
+      :loading="loading"
+      @click="submit"
+    >Submit</el-button>
+    <p>
+      Note: Agree to display immediately after registration
+      <span style="color: #007fff">
+        <span class="btn" @click="terms">User</span>
+        <span class="btn" @click="privacy">Sercurity Policy</span>
+      </span>
     </p>
   </el-dialog>
 </template>
 
 <script>
-import { sendCode } from '@/api/code.js'
 import { register } from '@/api/user.js'
-import { validMobile } from '@/utils/validate.js'
+import { validEmail } from '@/utils/validate.js'
 export default {
   data() {
     return {
       username: '',
-      mobile: '',
-      code: '',
+      email: '',
       password: '',
-      codeCount: 0,
-      timer: null,
       loading: false,
       visible: false
     }
@@ -53,20 +47,19 @@ export default {
     bClose() {
       this.visible = false
       this.username = ''
-      this.mobile = ''
-      this.code = ''
+      this.email = ''
       this.password = ''
     },
 
     open() {
       this.visible = true
     },
-    
+
     terms() {
       this.$store.commit('login/CHANGE_VISIBLE', false)
       this.$router.push('/terms')
     },
-    
+
     privacy() {
       this.$store.commit('login/CHANGE_VISIBLE', false)
       this.$router.push('/privacy')
@@ -77,19 +70,16 @@ export default {
         const data = {
           username: this.username,
           password: this.password,
-          mobile: this.mobile,
-          code: this.code
+          email: this.email
         }
         this.loading = true
         register(data).then(
-          res => {
-            const params = { username: this.username, password: this.password }
+          (res) => {
+            const params = { username: this.username, password: this.password, status: 'on-line' }
             new Promise(async(resolve, reject) => {
               try {
                 await this.$store.dispatch('user/accountLogin', params)
-                const { roles } = await this.$store.dispatch('user/getUserInfo')
-                const accessRoutes = await this.$store.dispatch('permission/generateRoutes', roles)
-                this.$router.addRoutes(accessRoutes)
+                // await this.$store.dispatch('user/getUserInfo')
                 this.$message({
                   message: 'send successfully',
                   type: 'success'
@@ -104,7 +94,7 @@ export default {
               }
             })
           },
-          error => {
+          (error) => {
             console.error(error)
             this.loading = false
           }
@@ -118,24 +108,18 @@ export default {
         this.$message('username is inputed')
         return false
       }
-      if (!(/^[a-zA-Z][a-zA-Z0-9_]{1,15}$/.test(username))) {
+      if (!/^[a-zA-Z][a-zA-Z0-9_]{1,15}$/.test(username)) {
         this.$message('username validate error')
         return false
       }
 
-      const mobile = this.mobile
-      if (mobile === '') {
+      const email = this.email
+      if (email === '') {
         this.$message('number phone is inputed')
         return false
       }
-      if (!validMobile(mobile)) {
-        this.$message('format number phone is error')
-        return false
-      }
-
-      const code = this.code
-      if (code === '') {
-        this.$message('code is inputed')
+      if (!validEmail(email)) {
+        this.$message('format email is inccorect')
         return false
       }
 
@@ -146,51 +130,16 @@ export default {
       }
 
       if (password.length < 6) {
-        this.$message('format password is error')
+        this.$message('password is minximum 6')
         return false
       }
       return true
-    },
-
-    sendCode() {
-      const mobile = this.mobile
-      if (mobile === '') {
-        this.$message('number phone is inputed')
-        return
-      }
-      if (!validMobile(mobile)) {
-        this.$message('format number phone is error')
-        return
-      }
-
-      const TIME_COUNT = 120
-      if (!this.timer) {
-        this.codeCount = TIME_COUNT
-        this.timer = setInterval(() => {
-          if (this.codeCount > 0 && this.codeCount <= TIME_COUNT) {
-            this.codeCount--
-          } else {
-            clearInterval(this.timer)
-            this.timer = null
-          }
-        }, 1000)
-      }
-      const params = { mobile: mobile }
-      sendCode(params).then(
-        res => {
-          this.$message({
-            message: 'send code successfully',
-            type: 'success'
-          })
-        }
-      )
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-
 .register-dialog {
   font-size: 14px;
 

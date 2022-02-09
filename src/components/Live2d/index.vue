@@ -46,17 +46,17 @@ export default {
 
   methods: {
     init() {
-      // dynamic load live2d from cdn
-      try{
+      try {
         load(live2dJs, (err) => {
           if (err) {
             this.$message.error(err.message)
             return
           }
+          // eslint-disable-next-line no-undef
           loadlive2d('live2d', 'https://poile-img.nos-eastchina1.126.net/live2d/model.json')
         })
-      }catch(e){
-        //TODO handle the exception
+      } catch (e) {
+        // TODO handle the exception
       }
     }
   }

@@ -1,8 +1,7 @@
 import request from '@/utils/request'
 
-
 /**
- * @description 是否已点赞
+ * @description
  * @param {Object} articleId
  */
 export function isLiked(articleId) {
@@ -10,10 +9,10 @@ export function isLiked(articleId) {
 }
 
 /**
- * @description 新增点赞
+ * @description
  * @param {Object} params
  */
-export function addLike(params){
+export function addLike(params) {
   return request({
     url: '/article/like/add',
     method: 'post',
@@ -22,7 +21,7 @@ export function addLike(params){
 }
 
 /**
- * @description 取消点赞
+ * @description
  * @param {Object} params
  */
 export function cancelLiked(params) {

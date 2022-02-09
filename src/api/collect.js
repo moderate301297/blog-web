@@ -1,8 +1,7 @@
 import request from '@/utils/request'
 
-
 /**
- * @description 是否已收藏
+ * @description
  * @param {Object} articleId
  */
 export function isCollected(articleId) {
@@ -10,10 +9,10 @@ export function isCollected(articleId) {
 }
 
 /**
- * @description 新增收藏
+ * @description
  * @param {Object} params
  */
-export function addCollect(params){
+export function addCollect(params) {
   return request({
     url: '/article/collect/add',
     method: 'post',
@@ -22,7 +21,7 @@ export function addCollect(params){
 }
 
 /**
- * @description 取消收藏
+ * @description
  * @param {Object} params
  */
 export function cancelCollected(params) {
@@ -30,7 +29,7 @@ export function cancelCollected(params) {
 }
 
 /**
- * @description 分页获取收藏
+ * @description
  * @param {Object} params
  */
 export function pageCollect(params) {

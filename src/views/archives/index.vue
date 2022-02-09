@@ -1,4 +1,3 @@
-<!-- 文章归档页面 -->
 <template>
   <div ref="container" class="container">
     <app-header :nav-item-active="2" />
@@ -29,7 +28,7 @@
             color="#0bbd87"
             icon="el-icon-date"
             size="large"
-            :timestamp="'# 继续加油啊！当前月份一共' + total +'篇文章！'"
+            :timestamp="'# Keep up the good work! A total of ' + total +' articles in the current month!'"
             placement="top"
           />
           <transition-group name="fade">
@@ -66,9 +65,7 @@
       </div>
     </div>
 
-    <!-- 移动tab菜单图标 -->
     <svg-icon v-if="device !== 'desktop'" icon-class="archives-menu" class="menu-svg" @click="drawer=!drawer" />
-    <!-- 移动tab菜单抽屉 -->
     <el-drawer
       v-if="device !== 'desktop'"
       :visible.sync="drawer"
@@ -146,7 +143,7 @@ export default {
           records.forEach(
             ele => {
               const arr = ele.yearMonth.split('-')
-              ele.date = arr[0] + '年' + arr[1] + '月'
+              ele.date = arr[0] + 'Year' + arr[1] + 'Month'
             }
           )
           this.tabs = records
@@ -156,7 +153,6 @@ export default {
       )
     },
 
-    // 获取文章列表
     pageArticle() {
       this.loading = true
       const params = {
@@ -180,20 +176,17 @@ export default {
       )
     },
 
-    // 文章分页
     currentChange(current) {
       this.current = current
       this.pageArticle()
     },
 
-    // 归档tab分页
     tabPageChange(val) {
       this.tabCurrent = this.tabCurrent + val
       this.drawer = false
       this.pageArchives()
     },
 
-    // 左边tab点击事件
     tabClick(index, tab) {
       this.tabActive = index
       this.yearMonth = tab.yearMonth

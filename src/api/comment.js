@@ -2,14 +2,14 @@ import request from '@/utils/request'
 
 /**
  * @param {Object} params
- * @description 分页获取评论回复列表
+ * @description
  */
 export function pageComment(params) {
   return request.get('/article/comment/page', { params })
 }
 
 /**
- * @description 新增评论
+ * @description
  * @param {Object} params
  */
 export function addComment(params) {
@@ -21,7 +21,7 @@ export function addComment(params) {
 }
 
 /**
- * @description 新增回复
+ * @description
  * @param {Object} params
  */
 export function addReply(params) {
@@ -33,7 +33,7 @@ export function addReply(params) {
 }
 
 /**
- * @description 删除评论
+ * @description
  * @param {Object} params
  */
 export function deleteComment(params) {
@@ -41,7 +41,7 @@ export function deleteComment(params) {
 }
 
 /**
- * @description 删除回复
+ * @description
  * @param {Object} params
  */
 export function deleteReply(params) {
@@ -49,7 +49,7 @@ export function deleteReply(params) {
 }
 
 /**
- * @description 最新评论
+ * @description
  * @param {Object} params
  */
 export function latestCommentList(params) {

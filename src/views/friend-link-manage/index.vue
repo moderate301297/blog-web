@@ -86,13 +86,13 @@
     >
       <el-form ref="form" label-position="left" :model="form" :rules="rules">
         <el-form-item prop="name">
-          <el-input v-model="form.name" placeholder="输入名称"/>
+          <el-input v-model="form.name" placeholder="输入名称" />
         </el-form-item>
         <el-form-item prop="url">
-          <el-input v-model="form.url" placeholder="输入链接"/>
+          <el-input v-model="form.url" placeholder="输入链接" />
         </el-form-item>
         <el-form-item prop="icon">
-          <el-input v-model="form.icon" placeholder="输入图标"/>
+          <el-input v-model="form.icon" placeholder="输入图标" />
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">

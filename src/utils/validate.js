@@ -25,7 +25,7 @@ export function validMobile(mobile) {
 }
 
 /**
- * 
+ *
  * @param {String} email
  */
 export function validEmail(email) {

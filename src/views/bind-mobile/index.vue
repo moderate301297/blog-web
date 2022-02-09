@@ -60,20 +60,20 @@ export default {
       if (this.vsubmit()) {
         this.loading = true
         const params = { mobile: this.mobile, code: this.code }
-          bindMobile(params).then(
-            res => {
-              this.loading = false
-              this.$message({
-                message: 'send code successfully',
-                type: 'success'
-              })
-              this.$store.dispatch('user/getUserInfo').then(res => this.$router.push('/user/info'))
-            },
-            error => {
-              console.error(error)
-              this.loading = false
-            }
-          )
+        bindMobile(params).then(
+          res => {
+            this.loading = false
+            this.$message({
+              message: 'send code successfully',
+              type: 'success'
+            })
+            this.$store.dispatch('user/getUserInfo').then(res => this.$router.push('/user/info'))
+          },
+          error => {
+            console.error(error)
+            this.loading = false
+          }
+        )
       }
     },
 
@@ -104,7 +104,7 @@ export default {
         this.$message('number phone is incorrect')
         return
       }
-      
+
       const TIME_COUNT = 120
       if (!this.timer) {
         this.codeCount = TIME_COUNT

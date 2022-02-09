@@ -6,14 +6,14 @@ const UsernameKey = 'username'
 const PasswordKey = 'password'
 const RememberKey = 'remember'
 /**
- * 获取 accessToken
+ * accessToken
  */
 export function getAccessToken() {
   return Cookies.get(AccessTokenKey)
 }
 
 /**
- * 设置 accessToken
+ * accessToken
  * @param {String} token
  */
 export function setAccessToken(token) {
@@ -21,14 +21,14 @@ export function setAccessToken(token) {
 }
 
 /**
- * 移除 accessToken
+ * accessToken
  */
 export function removeAccessToken() {
   return Cookies.remove(AccessTokenKey)
 }
 
 /**
- * 设置用户名
+ *
  * @param {String} username
  */
 export function setUsername(username) {
@@ -36,7 +36,7 @@ export function setUsername(username) {
 }
 
 /**
- * 获取用户名
+ *
  */
 export function getUsername() {
   const v = Cookies.get(UsernameKey)
@@ -44,14 +44,14 @@ export function getUsername() {
 }
 
 /**
- * 移除 用户名
+ *
  */
 export function removeUsername() {
   return Cookies.remove(UsernameKey)
 }
 
 /**
- * 设置密码
+ *
  * @param {String} password
  */
 export function setPassword(password) {
@@ -59,7 +59,7 @@ export function setPassword(password) {
 }
 
 /**
- * 获取密码
+ *
  */
 export function getPassword() {
   const v = Cookies.get(PasswordKey)
@@ -67,21 +67,21 @@ export function getPassword() {
 }
 
 /**
- * 移除 密码
+ *
  */
 export function removePassword() {
   return Cookies.remove(PasswordKey)
 }
 
 /**
- * 设置记住密码
+ *
  */
 export function setRemember(checked) {
   return Cookies.set(RememberKey, checked, { expires: 15 })
 }
 
 /**
- * 获取记住密码
+ *
  */
 export function getRemember() {
   return Cookies.get(RememberKey)

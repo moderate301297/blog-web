@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 /**
- * 新增标签
+ *
  * @params {Object} params
  */
 export function addTag(params) {
@@ -13,7 +13,7 @@ export function addTag(params) {
 }
 
 /**
- * 分页获取标签列表
+ *
  * @param {Object} params
  */
 export function pageTag(params) {
@@ -21,14 +21,14 @@ export function pageTag(params) {
 }
 
 /**
- * 获取标签列表
+ *
  */
 export function tagList() {
   return request.get('/tag/list')
 }
 
 /**
- * 修改标签
+ *
  * @param {Object} params
  */
 export function updateTag(params) {
@@ -40,7 +40,7 @@ export function updateTag(params) {
 }
 
 /**
- * 删除标签
+ *
  * @param {Object} id
  */
 export function deleteTag(id) {

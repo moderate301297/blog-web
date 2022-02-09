@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 /**
- * 
+ *
  * @data {Object} data
  */
 export function pageClient(params) {
@@ -9,7 +9,7 @@ export function pageClient(params) {
 }
 
 /**
- * 保存客户端
+ *
  * @param {Object} data
  */
 export function saveClient(data) {
@@ -17,7 +17,7 @@ export function saveClient(data) {
 }
 
 /**
- * 删除客户端
+ *
  * @param {Object} id
  */
 export function deleteClient(id) {

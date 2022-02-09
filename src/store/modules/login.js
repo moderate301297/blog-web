@@ -29,9 +29,6 @@ const mutations = {
 
 const actions = {
 
-  /**
-   * 记住用户名和密码
-   */
   setUsernameAndPassword({ commit }, params) {
     return new Promise((resolve, reject) => {
       const username = params.username
@@ -42,13 +39,11 @@ const actions = {
       setPassword(password)
       resolve()
     }).catch(error => {
+      // eslint-disable-next-line no-undef
       reject(error)
     })
   },
 
-  /**
-   * 清除用户和密码
-   */
   clearUsernameAndPassword({ commit }, params) {
     return new Promise((resolve, reject) => {
       commit('SET_USERNAME', '')
@@ -57,6 +52,7 @@ const actions = {
       removePassword()
       resolve()
     }).catch(error => {
+      // eslint-disable-next-line no-undef
       reject(error)
     })
   }

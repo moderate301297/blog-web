@@ -128,7 +128,7 @@ export default {
         this.$message('number phone is incorrect')
         return
       }
-     
+
       const TIME_COUNT = 120
       if (!this.timer) {
         this.codeCount = TIME_COUNT

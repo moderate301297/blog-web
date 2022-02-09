@@ -1,8 +1,7 @@
 import request from '@/utils/request'
 
-
 /**
- * 发送验证码
+ *
  * @param {Object} params
  */
 export function sendCode(params) {

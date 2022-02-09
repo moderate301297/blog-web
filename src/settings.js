@@ -10,13 +10,18 @@ module.exports = {
 
   /**
    * @type {boolean} true | false
-   * @description 
+   * @description
    */
   sidebarLogo: true,
 
   /**
-   * @description 
+   * @description
    */
-  defaultAvatar: 'https://poile-img.nos-eastchina1.126.net/without-avatar.png'
+  defaultAvatar: 'https://poile-img.nos-eastchina1.126.net/without-avatar.png',
+
+  httpNodeCors: {
+    origin: '*',
+    methods: 'GET,PUT,POST,DELETE'
+  }
 
 }

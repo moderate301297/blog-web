@@ -1,12 +1,12 @@
 import request from '@/utils/request'
 
 /**
- * 账号登录
+ *
  * @param {Object} params
  */
 export function accountLogin(params) {
   return request({
-    url: '/account/login',
+    url: '/users/login',
     headers: {
       'Authorization': 'Basic cGM6MTIzNDU2'
     },
@@ -16,7 +16,7 @@ export function accountLogin(params) {
 }
 
 /**
- * 第三方登录
+ *
  * @param {Object} params
  */
 export function thirdLogin(params) {
@@ -31,33 +31,19 @@ export function thirdLogin(params) {
 }
 
 /**
- * 手机号验证码登录
- * @param {Object} params
- */
-export function codeLogin(params) {
-  return request({
-    url: '/mobile/login',
-    headers: {
-      'Authorization': 'Basic cGM6MTIzNDU2'
-    },
-    method: 'post',
-    params: params
-  })
-}
-
-/**
- * @description 获取用户信息
+ * @description
  * @param {String} token
  */
 export function getUserInfo(token) {
   return request({
-    url: '/user/info',
-    method: 'get'
+    url: '/users/info',
+    method: 'get',
+    params: { token }
   })
 }
 
 /**
- * @description 退出
+ * @description
  * @param {Object} params
  */
 export function logout(params) {
@@ -72,23 +58,23 @@ export function logout(params) {
 }
 
 /**
- * 用户注册
+ *
  * @param {Object} data
  */
 export function register(data) {
-  return request.post('/user/register', data)
+  return request.post('/users/register', data)
 }
 
 /**
- * 更新用户（非空项更新）
+ *
  * @param {Object} data
  */
 export function updateUser(data) {
-  return request.post('/user/update', data)
+  return request.post('/users/update', data)
 }
 
 /**
- * 更新密码
+ *
  * @param {Object} params
  */
 export function updatePassword(params) {
@@ -100,7 +86,7 @@ export function updatePassword(params) {
 }
 
 /**
- * 重置密码
+ *
  * @param {Object} params
  */
 export function resetPassword(params) {
@@ -112,7 +98,7 @@ export function resetPassword(params) {
 }
 
 /**
- * 验证邮箱（发送验证链接）
+ *
  * @param {Object} params
  */
 export function validateEmail(params) {
@@ -124,7 +110,7 @@ export function validateEmail(params) {
 }
 
 /**
- * code绑定邮箱
+ *
  * @param {Object} params
  */
 export function bindEmail(params) {
@@ -136,7 +122,7 @@ export function bindEmail(params) {
 }
 
 /**
- * 验证原手机号
+ *
  * @param {Object} params
  */
 export function validateMobile(params) {
@@ -148,7 +134,7 @@ export function validateMobile(params) {
 }
 
 /**
- * 绑定新手机号
+ *
  * @param {Object} params
  */
 export function rebindMobile(params) {
@@ -160,7 +146,7 @@ export function rebindMobile(params) {
 }
 
 /**
- * 分页获取用户
+ *
  * @param {Object} params
  */
 export function pageUser(params) {
@@ -168,7 +154,7 @@ export function pageUser(params) {
 }
 
 /**
- * 修改用户状态
+ *
  * @param {Object} params
  */
 export function updateStatus(params) {
@@ -180,7 +166,7 @@ export function updateStatus(params) {
 }
 
 /**
- * 绑定用户名
+ *
  * @param {Object}  params
  */
 export function bindUsername(params) {
@@ -192,13 +178,13 @@ export function bindUsername(params) {
 }
 
 /**
- * 绑定手机号
+ *
  * @param {Object} params
  */
 export function bindMobile(params) {
   return request({
-      url: '/user/mobile/bind',
-      method: 'post',
-      params: params
-    })
+    url: '/user/mobile/bind',
+    method: 'post',
+    params: params
+  })
 }

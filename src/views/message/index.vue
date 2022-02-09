@@ -3,28 +3,27 @@
     <app-header :nav-item-active="4" />
     <div class="content-container">
       <div class="content-head">
-        <p class="main-tip-label">温馨提示</p>
+        <p class="main-tip-label">Tips</p>
         <p class="main-tip-text">
-          本站欢迎交换友链，请在下面留言备注即可，请先在您博客上添加本站的友链。
+          This site welcomes the exchange of friend chains, please leave a comment below, please add the friend chain of this site on your blog first.?
           <span data-name="kissing_heart">
-            ﻿<span contenteditable="false"><span class="ap ap-kissing_heart">?
+            <span contenteditable="false"><span class="ap ap-kissing_heart">?
             </span>
             </span>
-          ﻿</span>
+          </span>
         </p>
         <div class="edit-container">
           <quill-editor ref="editor" v-model="content" :options="editorOption" />
         </div>
         <div class="main-tools-box">
-          <el-button :loading="cloading" type="danger" size="mini" @click="messageSubmit">留个言</el-button>
+          <el-button :loading="cloading" type="danger" size="mini" @click="messageSubmit">Leave a message</el-button>
         </div>
       </div>
       <div class="content-box">
-        <p class="main-tip-label">留言列表
-          <span class="right">共{{ total }}条留言</span>
+        <p class="main-tip-label">Message List
+          <span class="right">A total of {{ total }} messages</span>
         </p>
 
-        <!-- 留言列表 -->
         <ul class="content-list">
           <transition-group name="fade-list">
             <li v-for="(comment, index1) in commentList" :key="index1" class="list-item">
@@ -59,7 +58,6 @@
                   <span class="reply-btn" @click="reClick(comment.id, comment.fromUser.id)">回复</span>
                 </div>
 
-                <!-- 留言回复列表 -->
                 <ul class="reply-list">
                   <li v-for="(reply, index2) in comment.replyList" :key="index2" class="reply-item">
                     <div class="reply-date">{{ parseDate(reply.createTime) }}回复</div>
@@ -114,7 +112,6 @@
       @current-change="currentChange"
     />
 
-    <!-- 回复弹框 -->
     <el-dialog
       :visible.sync="reEditVisible"
       title="提示"
@@ -160,7 +157,7 @@ export default {
           'emoji-toolbar': true,
           'emoji-shortname': true
         },
-        placeholder: '客官，来都来了，怎么不给博主留个言呢 ？'
+        placeholder: 'Please leave your comments'
       },
       reEditVisible: false,
       reEditorOption: {
@@ -198,13 +195,11 @@ export default {
 
   methods: {
 
-    // 日期转换
     parseDate(str) {
       str = str.replace(/\-/g, '/')
       return parseDate(new Date(str))
     },
 
-    // 回复弹框关闭事件
     bClose() {
       this.pid = 0
       this.toUserId = 0
@@ -212,13 +207,11 @@ export default {
       this.recontent = ''
     },
 
-    // 监听分页
     currentChange(current) {
       this.current = current
       this.pageMessage()
     },
 
-    // 获取分页数据
     pageMessage() {
       this.loading = true
       const params = {
@@ -249,13 +242,11 @@ export default {
       )
     },
 
-    // 重载
     reload() {
       this.current = 1
       this.pageMessage()
     },
 
-    // 留言提交
     messageSubmit() {
       const userInfo = this.userInfo
       if (!userInfo) {
@@ -264,7 +255,7 @@ export default {
       }
       const content = this.content.replace(/<\/?p[^>]*>/gi, '')
       if (!content) {
-        this.$message('还没输入内容呢~')
+        this.$message('comment is inputed')
         return
       }
       const params = { content: content }
@@ -315,7 +306,6 @@ export default {
       }
     },
 
-    // 删除提交
     delSubmit(item) {
       deleteO(item.id).then(
         res => {
@@ -328,7 +318,6 @@ export default {
       )
     },
 
-    // 点击回复
     reClick(pid, toUserId) {
       const userInfo = this.userInfo
       if (!userInfo) {
@@ -340,7 +329,6 @@ export default {
       this.toUserId = toUserId
     },
 
-    // 回复提交
     reSubmit() {
       const content = this.recontent.replace(/<\/?p[^>]*>/gi, '')
       if (!content) {

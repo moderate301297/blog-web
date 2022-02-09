@@ -7,27 +7,42 @@
     element-loading-background="#fff"
   >
     <transition-group name="fade-list">
-      <li v-for="(item, index) in list" :key="index" class="list-item">
+      <li
+        v-for="(item, index) in list"
+        :key="index"
+        class="list-item"
+      >
         <div class="wrap-img">
-          <img :src="item.cover" />
+          <img :src="item.cover">
         </div>
         <div class="wrapper-meta">
           <div class="avatar-wrapper">
-            <img class="user-avatar" :src="item.user.avatar" />
+            <img
+              class="user-avatar"
+              :src="item.user.avatar"
+            >
           </div>
           <span class="right-solt">{{ item.user.nickname }}</span>
           <span class="right-solt">{{ formatDate(item.publishTime) }}</span>
-          <span class="active" @click="categoryClick(item.categoryId)">{{
+          <span
+            class="active"
+            @click="categoryClick(item.categoryId)"
+          >{{
             item.categoryName
           }}</span>
         </div>
 
         <div class="content">
-          <router-link :to="'/article/' + item.id" class="title"
-            ><span v-if="item.original !== 1">【ARTICLE】</span>
-            {{ item.title }}</router-link
+          <router-link
+            :to="'/article/' + item.id"
+            class="title"
           >
-          <p class="abstract multi-ellipsis--l3">{{ item.summary }}</p>
+            <span v-if="item.original !== 1">【ARTICLE】</span>
+            {{ item.title }}
+          </router-link>
+          <p class="abstract multi-ellipsis--l3">
+            {{ item.summary }}
+          </p>
           <div class="tags-wrapper">
             <span
               v-for="(tag, index2) in item.tagList"
@@ -47,55 +62,60 @@
         </div>
       </li>
     </transition-group>
-    <div v-show="list.length === 0 && !loading" class="list-empty">No Data</div>
+    <div
+      v-show="list.length === 0 && !loading"
+      class="list-empty"
+    >
+      No Data
+    </div>
   </ul>
 </template>
 
 <script>
-import { formatDate } from "@/utils/index.js";
+import { formatDate } from '@/utils/index.js'
 export default {
-  name: "ArticleList",
+  name: 'ArticleList',
   props: {
     list: {
       type: Array,
       default() {
-        return [];
-      },
+        return []
+      }
     },
     loading: {
       type: Boolean,
-      default: true,
-    },
+      default: true
+    }
   },
   methods: {
     formatDate(str) {
-      str = str.replace(/-/g, "/");
-      const date = new Date(str);
-      const now = new Date();
+      str = str.replace(/-/g, '/')
+      const date = new Date(str)
+      const now = new Date()
       return date.getFullYear() === now.getFullYear()
-        ? formatDate(new Date(str), "MM-dd")
-        : formatDate(new Date(str), "yyyy-MM-dd");
+        ? formatDate(new Date(str), 'MM-dd')
+        : formatDate(new Date(str), 'yyyy-MM-dd')
     },
 
     categoryClick(id) {
-      if (this.$route.path !== "/category") {
+      if (this.$route.path !== '/category') {
         this.$router.push({
-          path: "/category",
-          query: { id: id },
-        });
+          path: '/category',
+          query: { id: id }
+        })
       }
     },
 
     tagClick(id) {
-      if (this.$route.path !== "/tag") {
+      if (this.$route.path !== '/tag') {
         this.$router.push({
-          path: "/tag",
-          query: { id: id },
-        });
+          path: '/tag',
+          query: { id: id }
+        })
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

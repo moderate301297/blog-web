@@ -2,14 +2,14 @@ import request from '@/utils/request'
 
 /**
  * @param {Object} params
- * @description 分页获取留言
+ * @description
  */
 export function pageMessage(params) {
   return request.get('/leave/message/page', { params })
 }
 
 /**
- * @description 新增留言
+ * @description
  * @param {Object} params
  */
 export function addMessage(params) {
@@ -21,7 +21,7 @@ export function addMessage(params) {
 }
 
 /**
- * @description 新增回复
+ * @description
  * @param {Object} params
  */
 export function addReply(params) {
@@ -33,7 +33,7 @@ export function addReply(params) {
 }
 
 /**
- * @description 删除留言或回复
+ * @description
  * @param {Object} id
  */
 export function deleteO(id) {

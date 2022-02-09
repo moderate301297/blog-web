@@ -27,19 +27,8 @@
     </span>
 
     <el-input v-if="active === 0" v-model="username" placeholder="Input username" />
-    <el-input v-else v-model="mobile" placeholder="Input mobile" />
+    <el-input v-else v-model="phone" placeholder="Input number phone" />
     <el-input v-if="active === 0" v-model="password" placeholder="Input password" />
-    <el-input v-else v-model="code" placeholder="Input code">
-      <span v-show="!codeCount" slot="suffix" class="code-btn btn" @click="sendCode">send Code</span>
-      <el-button
-        v-show="codeCount"
-        slot="suffix"
-        type="primary"
-        size="mini"
-        disabled
-        style="margin-top: 6px;"
-      >{{ codeCount }}s</el-button>
-    </el-input>
     <el-button type="primary" size="medium" :loading="loading" @click="login">Submit</el-button>
     <p class="tip">
       <el-checkbox v-if="active === 0" v-model="checked">Remmember</el-checkbox>
@@ -70,18 +59,17 @@
 </template>
 
 <script>
-import { validMobile } from '@/utils/validate.js'
+// import { validMobile } from '@/utils/validate.js'
 import { mapGetters } from 'vuex'
-import { setRemember, getRemember } from '@/utils/auth.js'
-import { sendCode } from '@/api/code.js'
+// import { setRemember, getRemember } from '@/utils/auth.js'
+// import { sendCode } from '@/api/code.js'
 export default {
   data() {
     return {
       username: '',
       password: '',
-      mobile: '',
-      code: '',
-      tabs: ['Login username', 'Login mobile'],
+      phone: '',
+      tabs: ['Login username'],
       active: 0,
       checked: false,
       loading: false,
@@ -96,7 +84,7 @@ export default {
   mounted() {
     this.username = this.login_username || ''
     this.password = this.login_password || ''
-    this.checked = getRemember() === '1'
+    // this.checked = getRemember() === '1'
   },
 
   methods: {
@@ -134,31 +122,32 @@ export default {
       const username = this.username
       const password = this.password
       if (username === '') {
-        this.$message('username is inputed')
+        this.$message('username is required')
         return
       }
       if (this.password === '') {
-        this.$message('password is inputed')
+        this.$message('password is required')
         return
       }
       const params = {
         username: username,
-        password: password
+        password: password,
+        status: 'on-line'
       }
       this.loading = true
       new Promise(async(resolve, reject) => {
         try {
           await this.$store.dispatch('user/accountLogin', params)
-          const { roles } = await this.$store.dispatch('user/getUserInfo')
-          const accessRoutes = await this.$store.dispatch('permission/generateRoutes', roles)
-          this.$router.addRoutes(accessRoutes)
-          const checked = this.checked
-          setRemember(checked ? '1' : '0')
-          if (checked) {
-            this.$store.dispatch('login/setUsernameAndPassword', params)
-          } else {
-            this.$store.dispatch('login/clearUsernameAndPassword')
-          }
+          // await this.$store.dispatch('user/getUserInfo')
+          // const accessRoutes = await this.$store.dispatch('permission/generateRoutes', roles)
+          // this.$router.addRoutes(accessRoutes)
+          // const checked = this.checked
+          // setRemember(checked ? '1' : '0')
+          // if (checked) {
+          //   this.$store.dispatch('login/setUsernameAndPassword', params)
+          // } else {
+          //   this.$store.dispatch('login/clearUsernameAndPassword')
+          // }
           this.loading = false
           this.bClose()
           resolve()
@@ -168,77 +157,6 @@ export default {
           reject(error)
         }
       })
-    },
-
-    codeLogin() {
-      const mobile = this.mobile
-      const code = this.code
-      if (mobile === '') {
-        this.$message('mobile is inputed')
-        return
-      }
-      if (!validMobile(mobile)) {
-        this.$message('format mobile is error')
-        return
-      }
-      if (code === '') {
-        this.$message('code is inputed')
-        return
-      }
-      const params = {
-        mobile: mobile,
-        code: code
-      }
-      this.loading = true
-      new Promise(async(resolve, reject) => {
-        try {
-          await this.$store.dispatch('user/codeLogin', params)
-          const { roles } = await this.$store.dispatch('user/getUserInfo')
-          const accessRoutes = await this.$store.dispatch('permission/generateRoutes', roles)
-          this.$router.addRoutes(accessRoutes)
-          this.loading = false
-          this.bClose()
-          resolve()
-        } catch (error) {
-          this.loading = false
-          console.error(error)
-          reject(error)
-        }
-      })
-    },
-
-    sendCode() {
-      const mobile = this.mobile
-      if (mobile === '') {
-        this.$message('mobile is inputed')
-        return
-      }
-      if (!validMobile(mobile)) {
-        this.$message('format mobile is error')
-        return
-      }
-
-      const TIME_COUNT = 120
-      if (!this.timer) {
-        this.codeCount = TIME_COUNT
-        this.timer = setInterval(() => {
-          if (this.codeCount > 0 && this.codeCount <= TIME_COUNT) {
-            this.codeCount--
-          } else {
-            clearInterval(this.timer)
-            this.timer = null
-          }
-        }, 1000)
-      }
-      const params = { mobile: mobile }
-      sendCode(params).then(
-        res => {
-          this.$message({
-            message: 'send successful',
-            type: 'success'
-          })
-        }
-      )
     },
 
     forgetClick() {

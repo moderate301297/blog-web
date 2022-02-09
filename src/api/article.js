@@ -26,7 +26,7 @@ export function pageArticle(params) {
 
 /**
  * 状态修改
- * @param {Object} params 
+ * @param {Object} params
  */
 export function updateStatus(params) {
   return request({
@@ -37,7 +37,7 @@ export function updateStatus(params) {
 }
 
 /**
- * 分页获取已发布文章（前台）
+ *
  * @param {Object} params
  */
 export function pagePublishedArticle(params) {
@@ -100,5 +100,5 @@ export function incrementView(id) {
  * @param {Object} params
  */
 export function interrelated(params) {
-  return request.get('/article/interrelated/list', { params } )
+  return request.get('/article/interrelated/list', { params })
 }

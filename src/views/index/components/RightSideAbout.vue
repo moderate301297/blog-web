@@ -4,15 +4,14 @@
       <img
         class="user-avatar"
         src="https://poile-img.nos-eastchina1.126.net/me.png"
-      />
+      >
     </div>
-    <router-link to="/about"
-      >I am? Who am I? How can I do this?[<span
-        class="btn"
-        style="color: #007fff"
-        >About</span
-      >]</router-link
-    >
+    <router-link
+      to="/about"
+    >I am? Who am I? How can I do this?[<span
+      class="btn"
+      style="color: #007fff"
+    >About</span>]</router-link>
   </div>
 </template>
 

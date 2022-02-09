@@ -15,7 +15,7 @@ const dynamicLoadScript = (src, callback) => {
   }
 
   if (existingScript && cb) {
-      callbacks.push(cb)
+    callbacks.push(cb)
   }
 
   function stdOnEnd(script) {
