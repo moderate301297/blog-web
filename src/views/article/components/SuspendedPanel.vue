@@ -113,22 +113,20 @@ export default {
 
   methods: {
 
-    // 拷贝成功
     copySuccess() {
       this.$message({
-        message: '复制成功',
+        message: 'copy successfully',
         type: 'success'
       })
     },
 
-    // 点赞点击
     likeClick() {
       if (!this.token) {
         this.$store.commit('login/CHANGE_VISIBLE', true)
         return
       }
       const liked = this.liked
-      const params = { articleId: this.id }
+      const params = { articleId: this.id, access_token: this.token }
       if (!liked) {
         addLike(params).then(
           res => {
@@ -146,7 +144,6 @@ export default {
       }
     },
 
-    // 收藏点击
     collectClick() {
       if (!this.token) {
         this.$store.commit('login/CHANGE_VISIBLE', true)
@@ -171,10 +168,9 @@ export default {
       }
     },
 
-    // 是否已点赞
     isLiked() {
       if (this.token) {
-        isLiked(this.id).then(
+        isLiked(this.id, this.token).then(
           res => {
             this.testLiked = res.data === 1
           }
@@ -182,10 +178,9 @@ export default {
       }
     },
 
-    // 是否已收藏
     isCollected() {
       if (this.token) {
-        isCollected(this.id).then(
+        isCollected(this.id, this.token).then(
           res => {
             this.testCollected = res.data === 1
           }
@@ -193,12 +188,10 @@ export default {
       }
     },
 
-    // 更改url
     changeUrl(url) {
       this.url = url
     },
 
-    // 更改id
     changeId(id) {
       this.id = id
     }

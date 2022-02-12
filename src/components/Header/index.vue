@@ -75,7 +75,7 @@
               <div class="reg-btn" @click="reClick">Sing Up</div>
             </div>
             <div v-else class="logined">
-              <router-link to="/user" class="console">{{ userInfo.username }}</router-link>
+              <router-link to="/user" class="console">{{ userInfo.nickname }}</router-link>
               <el-dropdown trigger="click" placement="bottom">
                 <div class="avatar-wrapper">
                   <img
@@ -88,7 +88,7 @@
                     <el-dropdown-item>Email</el-dropdown-item>
                   </router-link>
                   <el-dropdown-item>
-                    <span style="display: block" @click="logout">Sing Out</span>
+                    <span style="display: block" @click="logout">Log Out</span>
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
@@ -122,7 +122,6 @@ export default {
     return {
       keyword: '',
       inputIconColor: '',
-      userInfo: '',
       navItems: [
         {
           name: 'Home',

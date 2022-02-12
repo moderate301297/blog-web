@@ -2,32 +2,16 @@
   <div class="container">
     <app-header :nav-item-active="-1" />
     <div class="content-container animated fadeInUp">
-      <h3>重置密码</h3>
+      <h3>Change Password</h3>
       <el-form ref="form" :model="form">
         <el-form-item>
-          <el-input v-model="form.mobile" placeholder="输入手机号" />
+          <el-input v-model="form.password" placeholder="fill in new password" />
         </el-form-item>
         <el-form-item>
-          <el-input v-model="form.code" placeholder="验证码">
-            <span v-show="!codeCount" slot="suffix" class="code-btn btn" @click="sendCode">获取验证码</span>
-            <el-button
-              v-show="codeCount"
-              slot="suffix"
-              type="primary"
-              size="mini"
-              disabled
-              style="margin-top: 6px;"
-            >{{ codeCount }}s</el-button>
-          </el-input>
+          <el-input v-model="form.password2" placeholder="fill in confirm password" />
         </el-form-item>
         <el-form-item>
-          <el-input v-model="form.password" placeholder="密码至少6位数" />
-        </el-form-item>
-        <el-form-item>
-          <el-input v-model="form.password2" placeholder="确认密码" />
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" style="width: 100%;" :loading="loading" @click="submit">确定</el-button>
+          <el-button type="primary" style="width: 100%;" :loading="loading" @click="submit">Change</el-button>
         </el-form-item>
         <el-form-item style="text-align: center;">
           <router-link to="/" type="text" style="width: 100%;text-align: center;color: #007fff;">返回首页</router-link>
@@ -38,10 +22,8 @@
 </template>
 
 <script>
-import { sendCode } from '@/api/code.js'
 import { resetPassword } from '@/api/user.js'
 import AppHeader from '@/components/Header/index'
-import { validMobile } from '@/utils/validate.js'
 export default {
   components: {
     AppHeader
@@ -50,14 +32,11 @@ export default {
     return {
       loading: false,
       form: {
-        mobile: '',
         name: '',
-        code: '',
         password: '',
         password2: ''
       },
-      timer: null,
-      codeCount: 0
+      timer: null
     }
   },
 
@@ -67,12 +46,12 @@ export default {
       if (this.vsubmit()) {
         console.log('xxx')
         this.loading = true
-        const parmas = { mobile: this.form.mobile, code: this.form.code, password: this.form.password }
+        const parmas = { password: this.form.password }
         resetPassword(parmas).then(
           res => {
             this.loading = false
             this.$message({
-              message: '重置成功',
+              message: 'send successfully',
               type: 'success'
             })
           },
@@ -84,70 +63,21 @@ export default {
       }
     },
 
-    // 提交验证
     vsubmit() {
-      const mobile = this.form.mobile
-      if (mobile === '') {
-        this.$message('number phone is inputed')
-        return false
-      }
-      if (!validMobile(mobile)) {
-        this.$message('number phone is error')
-        return false
-      }
-      const code = this.form.code
-      if (code === '') {
-        this.$message('请输入验证码')
-        return false
-      }
       const password = this.form.password
       if (password === '') {
-        this.$message('请输入新密码')
+        this.$message('password is required')
         return false
       }
       if (password.length < 6) {
-        this.$message('密码不能少于6位数')
+        this.$message('password min 6 character')
         return false
       }
       if (password !== this.form.password2) {
-        this.$message('两次密码不一致')
+        this.$message('password confirm not like together')
         return false
       }
       return true
-    },
-
-    sendCode() {
-      const mobile = this.form.mobile
-      if (mobile === '') {
-        this.$message('number phone is inputed')
-        return
-      }
-      if (!validMobile(mobile)) {
-        this.$message('number phone is incorrect')
-        return
-      }
-
-      const TIME_COUNT = 120
-      if (!this.timer) {
-        this.codeCount = TIME_COUNT
-        this.timer = setInterval(() => {
-          if (this.codeCount > 0 && this.codeCount <= TIME_COUNT) {
-            this.codeCount--
-          } else {
-            clearInterval(this.timer)
-            this.timer = null
-          }
-        }, 1000)
-      }
-      const params = { mobile: mobile }
-      sendCode(params).then(
-        res => {
-          this.$message({
-            message: 'send code successfully',
-            type: 'success'
-          })
-        }
-      )
     }
   }
 }

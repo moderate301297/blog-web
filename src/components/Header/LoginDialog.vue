@@ -59,10 +59,8 @@
 </template>
 
 <script>
-// import { validMobile } from '@/utils/validate.js'
 import { mapGetters } from 'vuex'
-// import { setRemember, getRemember } from '@/utils/auth.js'
-// import { sendCode } from '@/api/code.js'
+import { setRemember, getRemember } from '@/utils/auth.js'
 export default {
   data() {
     return {
@@ -84,7 +82,7 @@ export default {
   mounted() {
     this.username = this.login_username || ''
     this.password = this.login_password || ''
-    // this.checked = getRemember() === '1'
+    this.checked = getRemember() === '1'
   },
 
   methods: {
@@ -100,9 +98,9 @@ export default {
     },
 
     bClose() {
-      this.code = ''
       this.active = 0
       this.$store.commit('login/CHANGE_VISIBLE', false)
+      this.$router.push('/')
     },
 
     tabClick(index) {
@@ -138,16 +136,16 @@ export default {
       new Promise(async(resolve, reject) => {
         try {
           await this.$store.dispatch('user/accountLogin', params)
-          // await this.$store.dispatch('user/getUserInfo')
-          // const accessRoutes = await this.$store.dispatch('permission/generateRoutes', roles)
-          // this.$router.addRoutes(accessRoutes)
-          // const checked = this.checked
-          // setRemember(checked ? '1' : '0')
-          // if (checked) {
-          //   this.$store.dispatch('login/setUsernameAndPassword', params)
-          // } else {
-          //   this.$store.dispatch('login/clearUsernameAndPassword')
-          // }
+          const { roles } = await this.$store.dispatch('user/getUserInfo')
+          const accessRoutes = await this.$store.dispatch('permission/generateRoutes', roles)
+          this.$router.addRoutes(accessRoutes)
+          const checked = this.checked
+          setRemember(checked ? '1' : '0')
+          if (checked) {
+            this.$store.dispatch('login/setUsernameAndPassword', params)
+          } else {
+            this.$store.dispatch('login/clearUsernameAndPassword')
+          }
           this.loading = false
           this.bClose()
           resolve()

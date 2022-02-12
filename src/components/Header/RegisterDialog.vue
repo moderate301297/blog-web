@@ -49,6 +49,8 @@ export default {
       this.username = ''
       this.email = ''
       this.password = ''
+      // this.$store.commit('login/CHANGE_VISIBLE', false)
+      this.$router.push('/')
     },
 
     open() {
@@ -75,11 +77,11 @@ export default {
         this.loading = true
         register(data).then(
           (res) => {
-            const params = { username: this.username, password: this.password, status: 'on-line' }
+            const params = { username: this.username, password: this.password }
             new Promise(async(resolve, reject) => {
               try {
                 await this.$store.dispatch('user/accountLogin', params)
-                // await this.$store.dispatch('user/getUserInfo')
+                await this.$store.dispatch('user/getUserInfo')
                 this.$message({
                   message: 'send successfully',
                   type: 'success'
@@ -105,7 +107,7 @@ export default {
     vsubmit() {
       const username = this.username
       if (username === '') {
-        this.$message('username is inputed')
+        this.$message('username is required')
         return false
       }
       if (!/^[a-zA-Z][a-zA-Z0-9_]{1,15}$/.test(username)) {
@@ -115,7 +117,7 @@ export default {
 
       const email = this.email
       if (email === '') {
-        this.$message('number phone is inputed')
+        this.$message('email is required')
         return false
       }
       if (!validEmail(email)) {
@@ -125,7 +127,7 @@ export default {
 
       const password = this.password
       if (password === '') {
-        this.$message('password is inputed')
+        this.$message('password is required')
         return false
       }
 

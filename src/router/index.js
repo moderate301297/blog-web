@@ -1,28 +1,28 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import store from '@/store'
+// import store from '@/store'
 Vue.use(Router)
 /* Layout */
 import Layout from '@/layout'
 /**
  *
  *
- * hidden: true                   如果设置了true，则不在左边导航栏显示,即不是后台管理的页面
- * alwaysShow: true               如果设置了true，则总在根菜单显示
+ * hidden: true
+ * alwaysShow: true
  *
- * redirect: noRedirect           设置noRedirect，则面包屑路径不可点
- * name:'router-name'             名称在 <keep-alive> 用到，后台管理必须设置！！！
+ * redirect: noRedirect
+ * name:'router-name'
  * meta : {
-    roles: ['admin','test']      页面角色控制，可多角色
-    title: 'title'               标题
-    icon: 'svg-name'             导航栏图标
-    breadcrumb: false            false，将不显示面包屑
-    activeMenu: '/example/list'  如果设置，则导航栏将高亮显示
+    roles: ['admin','test']
+    title: 'title'
+    icon: 'svg-name'
+    breadcrumb: false
+    activeMenu: '/example/list'
   }
  */
 
 /**
- * 常量路由，所有用户可见
+ *
  */
 export const constantRoutes = [
   {
@@ -124,7 +124,7 @@ export const constantRoutes = [
       name: 'Info',
       component: () => import('@/views/user/index'),
       meta: {
-        title: '基本信息',
+        title: 'Profile',
         icon: 'user'
       }
     }]
@@ -137,7 +137,7 @@ export const constantRoutes = [
       name: 'collect',
       component: () => import('@/views/collect-manage/index'),
       meta: {
-        title: '我的收藏',
+        title: 'Collections',
         icon: 'collect-manage'
       }
     }]
@@ -145,7 +145,7 @@ export const constantRoutes = [
 ]
 
 /**
- * 根据用户角色动态加载路由
+ *
  */
 export const asyncRoutes = [
   {
@@ -156,7 +156,7 @@ export const asyncRoutes = [
       name: 'UserManage',
       component: () => import('@/views/user-manage/index'),
       meta: {
-        title: '用户管理',
+        title: 'User management',
         icon: 'user-manage',
         roles: ['admin']
       }
@@ -167,28 +167,28 @@ export const asyncRoutes = [
     component: Layout,
     redirect: 'noRedirect',
     meta: {
-      title: '文章管理',
+      title: 'Article management',
       icon: 'art-manage',
       roles: ['admin']
     },
     children: [{
-        path: 'edit',
-        name: 'Edit',
-        component: () => import('@/views/article-manage/edit'),
-        meta: {
-          title: '编辑',
-          icon: 'art-edit'
-        }
-      },
-      {
-        path: 'list',
-        name: 'List',
-        component: () => import('@/views/article-manage/list'),
-        meta: {
-          title: '文章',
-          icon: 'art-list',
-        }
+      path: 'edit',
+      name: 'Edit',
+      component: () => import('@/views/article-manage/edit'),
+      meta: {
+        title: 'Edit article',
+        icon: 'art-edit'
       }
+    },
+    {
+      path: 'list',
+      name: 'List',
+      component: () => import('@/views/article-manage/list'),
+      meta: {
+        title: 'List article',
+        icon: 'art-list'
+      }
+    }
     ]
   },
   {
@@ -199,7 +199,7 @@ export const asyncRoutes = [
       name: 'RecommendManage',
       component: () => import('@/views/recommend-manage/index'),
       meta: {
-        title: '推荐管理',
+        title: 'Recommend management',
         icon: 'recommend-manage',
         roles: ['admin']
       }
@@ -213,7 +213,7 @@ export const asyncRoutes = [
       name: 'TagManage',
       component: () => import('@/views/tag-manage/index'),
       meta: {
-        title: '标签管理',
+        title: 'Tag management',
         icon: 'tag-manage',
         roles: ['admin']
       }
@@ -227,7 +227,7 @@ export const asyncRoutes = [
       name: 'CategoryManage',
       component: () => import('@/views/category-manage/index'),
       meta: {
-        title: '分类管理',
+        title: 'Category management',
         icon: 'category-manage',
         roles: ['admin']
       }
@@ -241,7 +241,7 @@ export const asyncRoutes = [
       name: 'FriendChainManage',
       component: () => import('@/views/friend-link-manage/index'),
       meta: {
-        title: '友链管理',
+        title: 'Friend management',
         icon: 'friend-chain-manage',
         roles: ['admin']
       }
@@ -255,7 +255,7 @@ export const asyncRoutes = [
       name: 'client',
       component: () => import('@/views/client-manage/index'),
       meta: {
-        title: '客户端管理',
+        title: 'Client managemment',
         icon: 'client-manage',
         roles: ['admin']
       }
@@ -269,13 +269,13 @@ export const asyncRoutes = [
       name: 'File',
       component: () => import('@/views/file-manage/index'),
       meta: {
-        title: '文件管理',
+        title: 'File management',
         icon: 'file-manage',
         roles: ['admin']
       }
     }]
   },
-  // 404 页面必须放到最后！！！
+  // 404
   {
     path: '*',
     redirect: '/404',
@@ -285,7 +285,6 @@ export const asyncRoutes = [
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support
-  // 路由滚动位置
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
       return savedPosition
@@ -300,7 +299,7 @@ const createRouter = () => new Router({
 const router = createRouter()
 
 /**
- * 重置路由
+ *
  */
 export function resetRouter() {
   const newRouter = createRouter()

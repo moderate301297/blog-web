@@ -17,13 +17,10 @@
         </div>
         <div class="wrapper-meta">
           <div class="avatar-wrapper">
-            <img
-              class="user-avatar"
-              :src="item.user.avatar"
-            >
+            <img :src="item.user.avatar || defaultAvatar" class="avatar">
           </div>
-          <span class="right-solt">{{ item.user.nickname }}</span>
-          <span class="right-solt">{{ formatDate(item.publishTime) }}</span>
+          <span class="right-solt">{{ item.user.username }}</span>
+          <span class="right-solt">{{ formatDate(item.created_at) }}</span>
           <span
             class="active"
             @click="categoryClick(item.categoryId)"
@@ -34,14 +31,14 @@
 
         <div class="content">
           <router-link
-            :to="'/article/' + item.id"
+            :to="'/article/' + item._id"
             class="title"
           >
             <span v-if="item.original !== 1">【ARTICLE】</span>
             {{ item.title }}
           </router-link>
           <p class="abstract multi-ellipsis--l3">
-            {{ item.summary }}
+            {{ item.content }}
           </p>
           <div class="tags-wrapper">
             <span
@@ -72,7 +69,8 @@
 </template>
 
 <script>
-import { formatDate } from '@/utils/index.js'
+import moment from 'moment'
+import { mapGetters } from 'vuex'
 export default {
   name: 'ArticleList',
   props: {
@@ -87,14 +85,17 @@ export default {
       default: true
     }
   },
+
+  computed: {
+    ...mapGetters([
+      'defaultAvatar'
+    ])
+  },
+
   methods: {
     formatDate(str) {
-      str = str.replace(/-/g, '/')
-      const date = new Date(str)
-      const now = new Date()
-      return date.getFullYear() === now.getFullYear()
-        ? formatDate(new Date(str), 'MM-dd')
-        : formatDate(new Date(str), 'yyyy-MM-dd')
+      console.log('str', str)
+      return moment(str).format('DD-MM-YYYY')
     },
 
     categoryClick(id) {

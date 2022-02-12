@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 /**
- * 保存文章
+ *
  * @data {Object} data
  */
 export function saveArticle(data) {
@@ -9,7 +9,7 @@ export function saveArticle(data) {
 }
 
 /**
- * 文章详情（后台）
+ *
  * @param {Object} id
  */
 export function articleDetail(id) {
@@ -17,7 +17,7 @@ export function articleDetail(id) {
 }
 
 /**
- * 分页获取文章（后台）
+ *
  * @param {Object} params
  */
 export function pageArticle(params) {
@@ -25,7 +25,7 @@ export function pageArticle(params) {
 }
 
 /**
- * 状态修改
+ *
  * @param {Object} params
  */
 export function updateStatus(params) {
@@ -45,7 +45,7 @@ export function pagePublishedArticle(params) {
 }
 
 /**
- * 删除文章
+ *
  * @param {Number} id
  */
 export function deleteArticle(id) {
@@ -53,7 +53,7 @@ export function deleteArticle(id) {
 }
 
 /**
- * 添加或更新推荐
+ *
  * @param {Object} params
  */
 export function addRecommend(params) {
@@ -65,14 +65,14 @@ export function addRecommend(params) {
 }
 
 /**
- * @description 推荐列表
+ * @description
  */
 export function recommendList() {
   return request.get('/article/recommend/list')
 }
 
 /**
- * 移除推荐
+ *
  * @param {Number} id
  */
 export function deleteRecommend(id) {
@@ -80,7 +80,7 @@ export function deleteRecommend(id) {
 }
 
 /**
- * @description 浏览文章
+ * @description
  * @param {Object} id
  */
 export function viewArtilce(id) {
@@ -88,17 +88,34 @@ export function viewArtilce(id) {
 }
 
 /**
- * 自增浏览次数
+ *
  * @param {Object} id
  */
-export function incrementView(id) {
-  return request.put('/article/increment_view/' + id)
+export function incrementView(id, countView) {
+  return request({
+    url: '/article/increment_view/' + id,
+    method: 'put',
+    params: { countView }
+  })
 }
 
 /**
- * @description 相关文章
+ * @description
  * @param {Object} params
  */
 export function interrelated(params) {
   return request.get('/article/interrelated/list', { params })
+}
+
+/**
+ * @description
+ * @param {Object} params
+ */
+export function updateLikeCount(params) {
+  console.log('params', params)
+  return request({
+    url: '/article/update_like',
+    method: 'put',
+    params: params
+  })
 }

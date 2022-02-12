@@ -1,16 +1,16 @@
 <template>
   <div class="in-container">
-    <div class="head">相关阅读</div>
+    <div class="head">Interrelated List</div>
     <ul
       v-loading="loading"
       class="content-list"
-      element-loading-text="拼命加载中"
+      element-loading-text="processing"
       element-loading-spinner="el-icon-loading"
       element-loading-background="#fff"
     >
       <li v-for="(item, index) in list" :key="index" class="list-item">
-        <router-link class="content-row title" :to="'/article/' + item.id">{{ item.title }}</router-link>
-        <p class="content-row">阅读&ensp;{{ item.viewCount }}</p>
+        <router-link class="content-row title" :to="'/article/' + item._id">{{ item.title }}</router-link>
+        <p class="content-row">view&ensp;{{ item.viewCount }}</p>
       </li>
     </ul>
   </div>
@@ -43,7 +43,7 @@ export default {
       interrelated(params).then(
         res => {
           this.loading = false
-          this.list = res.data
+          this.list = res.data.data
         }
       )
     }

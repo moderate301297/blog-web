@@ -77,9 +77,9 @@ router.beforeEach(async(to, from, next) => {
 
         router.addRoutes(accessRoutes)
 
-        next({ ...to, replace: true })
+        return next({ ...to, replace: true })
       } catch (error) {
-        await store.dispatch('user/resetToken')
+        // await store.dispatch('user/resetToken')
         Message.error(error || 'Has Error')
         next('/')
         NProgress.done()

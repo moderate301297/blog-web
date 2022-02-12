@@ -4,8 +4,12 @@ import request from '@/utils/request'
  * @description
  * @param {Object} articleId
  */
-export function isLiked(articleId) {
-  return request.get(`/article/like/liked/${articleId}`)
+export function isLiked(articleId, access_token) {
+  return request({
+    url: '/article/like/liked',
+    method: 'get',
+    params: { articleId, access_token }
+  })
 }
 
 /**

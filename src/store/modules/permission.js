@@ -1,7 +1,7 @@
 import { asyncRoutes, constantRoutes } from '@/router'
 
 /**
- * 判断是否拥有权限
+ *
  * @param roles
  * @param route
  */
@@ -14,7 +14,7 @@ function hasPermission(roles, route) {
 }
 
 /**
- * 递归权限路由
+ *
  * @param routes asyncRoutes
  * @param roles
  */
@@ -47,15 +47,12 @@ const mutations = {
 }
 
 const actions = {
-  // 根据角色动态加载路由
   generateRoutes({ commit }, roles) {
     return new Promise(resolve => {
       let accessedRoutes
-      // 管理员全部路由
       if (roles.includes('admin')) {
         accessedRoutes = asyncRoutes || []
       } else {
-        // 非管理员根据角色获取对应路由
         accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
       }
       commit('SET_ROUTES', accessedRoutes)

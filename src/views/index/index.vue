@@ -107,7 +107,8 @@ export default {
         res => {
           this.loading = false
           this.total = res.data.total
-          this.artList = res.data.records
+          this.artList = res.data.data
+          console.log('article', this.artList)
           this.$refs.container.scrollTop = 0
         },
         error => {

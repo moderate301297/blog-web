@@ -101,6 +101,7 @@ export default {
       tagList().then(
         res => {
           this.tags = res.data
+          console.log('this.tags', this.tags)
           const id = this.$route.query && this.$route.query.id
           if (id && this.tags.some(ele => ele.id === id)) {
             this.tagClick(id)

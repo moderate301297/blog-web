@@ -5,7 +5,7 @@
       <div v-if="!loading" class="content-container">
         <div class="layout-left-side">
           <h2 class="art-title">
-            <span v-if="article.original !== 1">【转载】</span>
+            <!-- <span v-if="article.original !== 1">【转载】</span> -->
             {{ article.title }}
           </h2>
           <div class="author-info-block">
@@ -13,17 +13,17 @@
               <img :src="article.user.avatar || defaultAvatar" class="avatar">
             </div>
             <div class="author-info-box">
-              <p class="nickename">{{ article.user.nickname }}</p>
+              <p class="nickename">{{ article.user.username }}</p>
               <div class="meta-box">
-                <span class="time">{{ formatDate(article.publishTime) }}</span>
-                <span class="views-count">浏览&ensp;{{ article.viewCount }}</span>
+                <span class="time">{{ formatDate(article.created_at) }}</span>
+                <span class="views-count">view&ensp;{{ article.viewCount }}</span>
               </div>
             </div>
           </div>
-          <div class="text-container markdown-body" v-html="article.htmlContent" />
-          <copy-right :url="article.original === 1 ? url : article.reproduce" :original="article.original" />
+          <div class="text-container markdown-body" v-html="article.content" />
+          <!-- <copy-right :url="article.original === 1 ? url : article.reproduce" :original="article.original" /> -->
           <art-tags :tags="article.tagList" />
-          <ul class="pre-next">
+          <!-- <ul class="pre-next">
             <li v-if="article.previous">
               <router-link :to="'/article/' + article.previous.id">
                 上一篇&ensp;:&ensp;{{ article.previous.title }}
@@ -34,8 +34,8 @@
                 下一篇&ensp;:&ensp;{{ article.next.title }}
               </router-link>
             </li>
-          </ul>
-          <comment-list :article-id="id" :author-id="article.user.id" />
+          </ul> -->
+          <comment-list :article-id="id" :author-id="article.user._id" />
         </div>
 
         <div v-if="device === 'desktop'" class="layout-right-side">
@@ -60,11 +60,11 @@ import { initAudio } from '@/assets/audio/index.js'
 import '@/assets/audio/index.css'
 import '@/styles/heilingt.css'
 import { mapGetters } from 'vuex'
-import { formatDate } from '@/utils/index.js'
+import moment from 'moment'
 import AppHeader from '@/components/Header/index'
-import { viewArtilce, incrementView } from '@/api/article.js'
+import { viewArtilce, incrementView, updateLikeCount } from '@/api/article.js'
 import CommentList from './components/CommentList'
-import CopyRight from './components/CopyRight'
+// import CopyRight from './components/CopyRight'
 import ArtTags from './components/ArtTags'
 import InterrelatedList from './components/InterrelatedList'
 import SuspendedPanel from './components/SuspendedPanel'
@@ -73,7 +73,7 @@ export default {
   components: {
     AppHeader,
     CommentList,
-    CopyRight,
+    // CopyRight,
     ArtTags,
     InterrelatedList,
     SuspendedPanel
@@ -100,7 +100,7 @@ export default {
     this.url = window.location.href
   },
 
-  // 路由变化，用于当前页进当前页
+  //
   beforeRouteUpdate(to, from, next) {
     this.id = to.params && to.params.id
     this.loading = true
@@ -117,14 +117,15 @@ export default {
 
   methods: {
 
-    // 加载文章数据
+    //
     initArticle() {
       this.loading = true
       viewArtilce(this.id).then(
         res => {
           this.loading = false
-          this.article = res.data
-          // 初始化音频
+          this.article = res.data.data
+          console.log('article', this.article)
+          //
           this.$nextTick().then(() => {
             initAudio()
           })
@@ -133,16 +134,14 @@ export default {
       )
     },
 
-    // 日期格式化
+    //
     formatDate(str) {
-      // 解决ios 日期NAN问题
-      str = str.replace(/-/g, '/')
-      return formatDate(new Date(str), 'yyyy年MM月dd日')
+      return moment(str).format('DD-MM-YYYY')
     },
 
-    // 浏览次数自增
+    //
     incrementView() {
-      incrementView(this.id).then(
+      incrementView(this.id, this.article.viewCount).then(
         res => {
           if (res.data) {
             this.article.viewCount = this.article.viewCount + 1
@@ -151,12 +150,23 @@ export default {
       )
     },
 
-    // 点赞数自增、自减
+    //
     likeCountChanges(val) {
-      this.article.likeCount = this.article.likeCount + val
+      console.log('updateLikeCount', this.article.likeCount + val)
+      const params = {
+        articleId: this.id,
+        likeCount: this.article.likeCount + val
+      }
+      updateLikeCount(params).then(
+        res => {
+          if (res.data) {
+            this.article.likeCount = this.article.likeCount + val
+          }
+        }
+      )
     },
 
-    // 收藏数自增、自减
+    //
     collectCountChanges(val) {
       this.article.collectCount = this.article.collectCount + val
     }

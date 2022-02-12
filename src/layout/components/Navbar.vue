@@ -11,22 +11,17 @@
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
-          <router-link to="/">
-            <el-dropdown-item>
-              首页
-            </el-dropdown-item>
-          </router-link>
           <span class="btn" @click="visible=true">
-            <el-dropdown-item>修改密码</el-dropdown-item>
+            <el-dropdown-item>Change password</el-dropdown-item>
           </span>
           <el-dropdown-item divided>
-            <span style="display:block;" @click="logout">退 出</span>
+            <span style="display:block;" @click="logout">Log Out</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
     <el-dialog
-      title="修改密码"
+      title="Change password"
       top="30vh"
       width="320px"
       :modal="true"
@@ -38,18 +33,18 @@
     >
       <el-form ref="form" label-position="left" :model="form" :rules="rules">
         <el-form-item prop="oldpwd">
-          <el-input v-model="form.oldpwd" placeholder="输入原密码" />
+          <el-input v-model="form.oldpwd" placeholder="fill in old password" />
         </el-form-item>
         <el-form-item prop="newpwd">
-          <el-input v-model="form.newpwd" placeholder="输入新密码" />
+          <el-input v-model="form.newpwd" placeholder="fill in new password" />
         </el-form-item>
         <el-form-item prop="newpwd2">
-          <el-input v-model="form.newpwd2" placeholder="确认密码" />
+          <el-input v-model="form.newpwd2" placeholder="fill in confirm password" />
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button size="medium" @click="dialogClose">取 消</el-button>
-        <el-button size="medium" type="primary" :loading="btnLoading" @click="saveSubmit">确 定</el-button>
+        <el-button size="medium" @click="dialogClose">Close</el-button>
+        <el-button size="medium" type="primary" :loading="btnLoading" @click="saveSubmit">Submit</el-button>
       </span>
     </el-dialog>
   </div>
@@ -59,7 +54,7 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
-import { updatePassword } from '@/api/user.js'
+import { updateUser } from '@/api/user.js'
 export default {
   components: {
     Breadcrumb,
@@ -68,7 +63,7 @@ export default {
   data() {
     var validatePass2 = (rule, value, callback) => {
       if (value !== this.form.newpwd) {
-        callback(new Error('两次输入密码不一致'))
+        callback(new Error('password not like together'))
       } else {
         callback()
       }
@@ -82,10 +77,10 @@ export default {
         newpwd2: ''
       },
       rules: {
-        oldpwd: [{ required: true, message: '请输入原密码', trigger: 'blur' }],
-        newpwd: [{ required: true, message: '请输入新密码', trigger: 'blur' }],
+        oldpwd: [{ required: true, message: 'old password is required', trigger: 'blur' }],
+        newpwd: [{ required: true, message: 'new password is required', trigger: 'blur' }],
         newpwd2: [
-          { required: true, message: '请输入新密码', trigger: 'blur' },
+          { required: true, message: 'confirm password is required', trigger: 'blur' },
           { validator: validatePass2, trigger: 'blur' }
         ]
       }
@@ -99,29 +94,26 @@ export default {
     ])
   },
   methods: {
-    // 切换SideBar
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
     },
 
-    // 关闭修改密码弹框
     dialogClose() {
       this.$refs['form'].resetFields()
       this.$refs['form'].clearValidate()
       this.visible = false
     },
 
-    // 保存提交
     saveSubmit() {
       this.$refs.form.validate((valid) => {
         if (valid) {
           this.btnLoading = true
-          const params = { oldPassword: this.form.oldpwd, newPassword: this.form.newpwd2 }
-          updatePassword(params).then(
+          const params = { userId: this.userInfo._id, password: this.form.newpwd }
+          updateUser(params).then(
             res => {
               this.btnLoading = false
               this.$message({
-                message: '修改成功',
+                message: 'send successfully',
                 type: 'success'
               })
               this.$refs['form'].resetFields()
@@ -137,7 +129,6 @@ export default {
       })
     },
 
-    // 退出
     logout() {
       this.$store.dispatch('user/logout').then(res => { this.$router.push('/') })
     }

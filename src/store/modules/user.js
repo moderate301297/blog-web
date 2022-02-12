@@ -1,4 +1,4 @@
-import { accountLogin, logout } from '@/api/user'
+import { accountLogin, logout, getUserInfo } from '@/api/user'
 import { getAccessToken, setAccessToken, removeAccessToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 import { thirdLogin } from '@/api/user.js'
@@ -29,7 +29,6 @@ const actions = {
         console.log('dataR', response)
         commit('SET_TOKEN', response.data.access_token)
         setAccessToken(response.data.access_token)
-        commit('SET_USER_INFO', response)
         resolve()
       }).catch(error => {
         reject(error)
@@ -42,7 +41,7 @@ const actions = {
       thirdLogin(params).then(response => {
         const { data } = response
         commit('SET_TOKEN', data.access_token)
-        // setAccessToken(data.access_token)
+        setAccessToken(data.access_token)
         resolve()
       }).catch(error => {
         reject(error)
@@ -50,35 +49,39 @@ const actions = {
     })
   },
 
-  // getUserInfo({ commit, state }) {
-  //   return new Promise((resolve, reject) => {
-  //     getUserInfo(getAccessToken()).then(response => {
-  //       if (!response.data) {
-  //         reject('user not found')
-  //       }
+  getUserInfo({ commit, state }) {
+    console.log('token', getAccessToken())
+    return new Promise((resolve, reject) => {
+      getUserInfo(getAccessToken()).then(response => {
+        console.log('roles', response)
+        if (!response.data) {
+          reject('user not found')
+        }
 
-  //       if (!response.data.roles || response.data.roles.length <= 0) {
-  //         reject('role not found')
-  //       }
-  //       commit('SET_ROLES', response.data.roles)
-  //       commit('SET_USER_INFO', response.data)
-  //       resolve(response.data)
-  //     }).catch(error => {
-  //       reject(error)
-  //     })
-  //   })
-  // },
+        if (!response.data.roles || response.data.roles.length <= 0) {
+          reject('roles not found')
+        }
+        commit('SET_ROLES', response.data.roles)
+        commit('SET_USER_INFO', response.data)
+        resolve(response.data)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
 
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
-      const access_token = state.token
+      const userInfo = JSON.parse(getAccessToken())
       commit('SET_TOKEN', '')
       commit('SET_ROLES', [])
       commit('SET_USER_INFO', '')
       removeAccessToken()
       resetRouter()
       const params = {
-        access_token: access_token
+        username: userInfo.username,
+        password: userInfo.password,
+        status: 'off-line'
       }
       logout(params).then(res => {
         resolve()
@@ -93,7 +96,7 @@ const actions = {
       commit('SET_TOKEN', '')
       commit('SET_ROLES', [])
       commit('SET_USER_INFO', '')
-      // removeAccessToken()
+      removeAccessToken()
       resetRouter()
       resolve()
     })

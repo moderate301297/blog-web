@@ -1,8 +1,8 @@
 
 <template>
-  <component v-bind="linkProps(to)">
+  <div v-bind="linkProps(to)">
     <slot />
-  </component>
+  </div>
 </template>
 
 <script>

@@ -1,15 +1,15 @@
 <template>
   <div class="app-container">
     <div class="setting-box">
-      <h1>个人信息</h1>
+      <h1>Personal Information</h1>
       <ul class="setting-list">
         <li class="item">
-          <span class="label">头像</span>
+          <span class="label">Avatar</span>
           <div class="avatar-wrapper">
             <img :src="userInfo.avatar || defaultAvatar" class="user-avatar">
           </div>
           <div class="action-box">
-            <div class="hint">支持 jpg、png 格式大小 300KB 以内的图片</div>
+            <div class="hint">Supports jpg、png images with a size of less than 300KB</div>
             <el-upload
               ref="upload"
               :action="path"
@@ -30,139 +30,75 @@
                 type="primary"
                 size="mini"
                 style="padding: 5px 7px;"
-              >点击上传</el-button>
+              >Upload</el-button>
             </el-upload>
           </div>
         </li>
         <li class="item">
-          <span class="label">用户名</span>
+          <span class="label">username</span>
           <div class="input-wrapper">
-            <el-input v-model="userInfo.username" disabled placeholder="未填写" />
+            <el-input v-model="userInfo.username" disabled placeholder="Fill in your username" />
           </div>
           <div class="action-box">
             <el-button v-if="userInfo.username" type="text" disabled style="color: #C0C4CC;">
-              <span><i class="el-icon-lock" />不可修改</span>
+              <span><i class="el-icon-lock" />Unchangeable</span>
             </el-button>
             <el-button v-else type="text" @click="usernamePrompt">
-              <span><i class="el-icon-lock" />立即填写</span>
+              <span><i class="el-icon-lock" />Change</span>
             </el-button>
           </div>
         </li>
         <li class="item">
-          <span class="label">昵称</span>
+          <span class="label">Nick Name</span>
           <div class="input-wrapper">
             <el-input
               ref="nicknameIput"
               v-model="form.nickname"
-              placeholder="填写你的昵称"
+              placeholder="fill in your nickname"
               @focus="nicknameIputFocus"
             />
           </div>
           <div class="action-box">
             <el-button v-show="!opVisible.nickname" type="text" @click="nicknameIputFocus">
-              <span><i class="el-icon-edit" />修改</span>
+              <span><i class="el-icon-edit" />Change</span>
             </el-button>
             <span v-show="opVisible.nickname">
-              <el-button type="text" style="color: #999;" @click="cancelNickname">取消</el-button>
-              <el-button type="text" @click="saveNickname">保存</el-button>
+              <el-button type="text" style="color: #999;" @click="cancelNickname">Cancel</el-button>
+              <el-button type="text" @click="saveNickname">Save</el-button>
             </span>
           </div>
         </li>
         <li class="item">
-          <span class="label">手机号</span>
+          <span class="label">Email</span>
           <div class="input-wrapper">
-            <el-input v-model="form.mobile" disabled placeholder="绑定手机号" />
-          </div>
-          <div class="action-box">
-            <router-link v-if="form.mobile" to="/rebind-mobile">
-              <span><i class="el-icon-mobile-phone" />更改绑定</span>
-            </router-link>
-            <router-link v-else to="/bind-mobile">
-              <span><i class="el-icon-mobile-phone" />立即绑定</span>
-            </router-link>
-          </div>
-        </li>
-        <li class="item">
-          <span class="label">邮箱</span>
-          <div class="input-wrapper">
-            <el-input v-model="form.email" disabled placeholder="未绑定邮箱" />
+            <el-input v-model="form.email" disabled placeholder="fill in your email" />
           </div>
           <div class="action-box">
             <router-link type="text" to="/email-validate">
-              <span><i class="el-icon-message" />{{ form.email?'更改绑定':'立即绑定' }}</span>
+              <span><i class="el-icon-message" />{{ form.email?'Change email':'Input email' }}</span>
             </router-link>
-          </div>
-        </li>
-        <li class="item">
-          <span class="label">生日</span>
-          <div class="input-wrapper">
-            <el-date-picker
-              ref="birthdayIput"
-              v-model="form.birthday"
-              type="date"
-              :prefix-icon="''"
-              placeholder="选择日期"
-              :clearable="false"
-              @focus="birthdayIputFocus"
-            />
-          </div>
-          <div class="action-box">
-            <el-button v-show="!opVisible.birthday" type="text" @click="birthdayIputFocus">
-              <span><i class="el-icon-date" />修改</span>
-            </el-button>
-            <span v-show="opVisible.birthday" style="display: flex;">
-              <el-button type="text" style="color: #999;" @click="cancelBirthday">取消</el-button>
-              <el-button type="text" @click="saveBirthday">保存</el-button>
-            </span>
-          </div>
-        </li>
-        <li class="item">
-          <span class="label">性别</span>
-          <div class="input-wrapper">
-            <el-select
-              ref="genderIput"
-              v-model="form.gender"
-              placeholder="请选择"
-              @focus="genderIputFocus"
-            >
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
-          </div>
-          <div class="action-box">
-            <el-button v-show="!opVisible.gender" type="text" @click="genderIputFocus">
-              <span><i class="el-icon-female" />修改</span>
-            </el-button>
-            <span v-show="opVisible.gender">
-              <el-button type="text" style="color: #999;" @click="cancelGender">取消</el-button>
-              <el-button type="text" @click="saveGender">保存</el-button>
-            </span>
           </div>
         </li>
 
         <li class="item">
-          <span class="label">简介</span>
+          <span class="label">Introduction</span>
           <div class="input-wrapper">
             <el-input
               ref="briefIput"
               v-model="form.brief"
               type="textarea"
               :rows="2"
-              placeholder="填写你的简介"
+              placeholder="fill in your introduction"
               @focus="briefIputFocus"
             />
           </div>
           <div class="action-box">
             <el-button v-show="!opVisible.brief" type="text" @click="briefIputFocus">
-              <span><i class="el-icon-edit" />修改</span>
+              <span><i class="el-icon-edit" />Change</span>
             </el-button>
             <span v-show="opVisible.brief">
-              <el-button type="text" style="color: #999;" @click="cancelBrief">取消</el-button>
-              <el-button type="text" @click="saveBrief">保存</el-button>
+              <el-button type="text" style="color: #999;" @click="cancelBrief">Cancel</el-button>
+              <el-button type="text" @click="saveBrief">Save</el-button>
             </span>
           </div>
         </li>
@@ -179,32 +115,17 @@ export default {
   name: 'User',
   data() {
     return {
-      options: [
-        {
-          value: 1,
-          label: '男'
-        },
-        {
-          value: 0,
-          label: '女'
-        }
-      ],
       opVisible: {
         nickname: false,
-        birthday: false,
-        gender: false,
         brief: false
       },
-      path: process.env.VUE_APP_BASE_API + '/user/avatar/update',
+      path: process.env.VUE_APP_BASE_API + '/users/avatar/upload/',
       files: [],
       loading: false,
       userInfo: '',
       form: {
         nickname: '',
-        mobile: '',
         email: '',
-        gender: 0,
-        birthday: '',
         brief: ''
       }
     }
@@ -228,93 +149,46 @@ export default {
 
   methods: {
 
-    // 初始化
     init() {
       const userInfo = this.$store.getters.userInfo
+      this.path = this.path + userInfo._id
       this.userInfo = userInfo
       this.username = userInfo.username
       this.form.nickname = userInfo.nickname
-      this.form.mobile = this.sensitiveMobile(userInfo.mobile)
       this.form.email = this.sensitiveEmail(userInfo.email)
-      this.form.gender = userInfo.gender
-      this.originalGender = userInfo.gender
-      this.form.birthday = userInfo.birthday
-      this.originalBirthday = userInfo.birthday
-      this.form.brief = userInfo.brief
+      this.form.brief = userInfo.introducation
     },
 
-    // 昵称输入框焦点事件
     nicknameIputFocus() {
       this.$refs.nicknameIput.focus()
       this.opVisible.nickname = true
     },
 
-    // 昵称取消保存
     cancelNickname() {
       this.form.nickname = this.userInfo.nickname
       this.opVisible.nickname = false
     },
 
-    // 昵称保存
     saveNickname() {
-      const data = { nickname: this.form.nickname, userId: this.userInfo.id }
+      const data = { nickname: this.form.nickname, userId: this.userInfo._id }
       this.updateUser(data, 0)
     },
 
-    // 生日栏聚焦
-    birthdayIputFocus() {
-      this.opVisible.birthday = true
-    },
-
-    // 生日取消保存
-    cancelBirthday() {
-      this.form.birthday = this.userInfo.birthday
-      this.opVisible.birthday = false
-    },
-
-    // 保存生日
-    saveBirthday() {
-      const data = { birthday: this.form.birthday, userId: this.userInfo.id }
-      this.updateUser(data, 1)
-    },
-
-    // 性别栏聚焦
-    genderIputFocus() {
-      this.$refs.genderIput.focus()
-      this.opVisible.gender = true
-    },
-
-    // 性别取消保存
-    cancelGender() {
-      this.form.gender = this.userInfo.gender
-      this.opVisible.gender = false
-    },
-
-    // 性别保存
-    saveGender() {
-      const data = { gender: this.form.gender, userId: this.userInfo.id }
-      this.updateUser(data, 2)
-    },
-
-    // 简介聚焦
     briefIputFocus() {
       this.$refs.briefIput.focus()
       this.opVisible.brief = true
     },
 
-    // 简介取消保存
     cancelBrief() {
       this.form.brief = this.userInfo.brief
       this.opVisible.brief = false
     },
 
-    // 保存简介
     saveBrief() {
-      const data = { brief: this.form.brief, userId: this.userInfo.id }
+      const data = { introducation: this.form.brief, userId: this.userInfo._id }
       this.updateUser(data, 3)
     },
 
-    // 更新用户信息
     updateUser(data, index) {
       return new Promise(async(resolve, reject) => {
         await updateUser(data).then(
@@ -324,17 +198,11 @@ export default {
                 this.opVisible.nickname = false
                 break
               case 1:
-                this.opVisible.birthday = false
-                break
-              case 2:
-                this.opVisible.gender = false
-                break
-              case 3:
                 this.opVisible.brief = false
                 break
             }
             this.$message({
-              message: '保存成功',
+              message: 'send successfully',
               type: 'success'
             })
             resolve()
@@ -348,34 +216,37 @@ export default {
       })
     },
 
-    // 超出个数限制
     onExceed() {
       this.loading = false
     },
 
-    // 上传成功
     uploadSuccess(res, file, fileList) {
-      if (res.code !== 0) {
+      if (res.code !== 200) {
         console.error(res.message)
-        this.$message.error('文件上传失败')
+        this.$message.error('Upload error')
         return
       }
+      console.log(file, fileList)
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        this.userInfo.avatar = e.target.result
+        console.log('this.userInfo.avatar', this.userInfo.avatar)
+      }
+      reader.readAsDataURL(file)
       this.loading = false
       this.$message({
-        message: '上传成功',
+        message: 'Send successfully',
         type: 'success'
       })
       this.$store.dispatch('user/getUserInfo').then(res => this.init())
     },
 
-    // 上传失败
     uploadError(err) {
       console.error(err)
       this.loading = false
-      this.$message.error('文件上传失败')
+      this.$message.error('Upload image error')
     },
 
-    // 上传前，对文件校验
     beforeUpload(file) {
       this.loading = true
       const isImg =
@@ -384,17 +255,16 @@ export default {
         file.type === 'image/jpg'
       const isLt300KB = file.size / 1000 < 300
       if (!isImg) {
-        this.$message.error('文件格式不正确')
+        this.$message.error('format image invalid')
         this.loading = false
       }
       if (!isLt300KB) {
-        this.$message.error('文件大小不能大于300KB')
+        this.$message.error('size image max 300KB')
         this.loading = false
       }
       return isImg && isLt300KB
     },
 
-    // 用户名输入弹框
     usernamePrompt() {
       this.$prompt('字母开头，允许2-16字节，允许字母数字下划线，并且用户名成功填写后不允许修改。', '填写用户名', {
         confirmButtonText: '确定',
@@ -417,15 +287,8 @@ export default {
       })
     },
 
-    // 邮箱脱敏
     sensitiveEmail(email) {
       return email ? email.substr(0, 2) + '****' + email.substr(email.indexOf('@')) : ''
-    },
-
-    // 手机号脱敏
-    sensitiveMobile(mobile) {
-      var pat = /(\d{3})\d*(\d{4})/
-      return mobile ? mobile.toString().replace(pat, '$1****$2') : ''
     }
   }
 }

@@ -6,38 +6,38 @@
           <quill-editor ref="editor" v-model="content" :options="editorOption" />
         </div>
         <div class="main-tools-box">
-          <el-button :loading="cloading" type="danger" size="mini" @click="commentSubmit">评论</el-button>
+          <el-button :loading="cloading" type="danger" size="mini" @click="commentSubmit">Submit</el-button>
         </div>
       </div>
       <div class="content-box">
-        <p class="main-tip-label">评论列表
-          <span class="right">共{{ total }}条评论</span>
+        <p class="main-tip-label">Message List
+          <span class="right">A total of {{ total }} messages</span>
         </p>
 
-        <!-- 评论列表 -->
+        <!-- Message List -->
         <ul class="content-list">
           <transition-group name="fade-list">
             <li v-for="(comment, index1) in commentList" :key="index1" class="list-item">
               <div class="cmt-li-title">
                 <div class="headimg">
-                  <img :src="comment.fromUser.avatar || defaultAvatar">
+                  <img :src="comment.user.avatar || defaultAvatar">
                 </div>
               </div>
               <div class="cmt-li-r">
                 <div class="top">
-                  <p class="nickname" :style="comment.fromUser.id === authorId ? 'color:#e74851' : ''">
-                    {{ comment.fromUser.nickname }}
+                  <p class="nickname" :style="comment.user._id === authorId ? 'color:#e74851' : ''">
+                    {{ comment.user.username }}
 
-                    <el-tag v-if="comment.fromUser.id === authorId" type="info" size="mini" effect="light">作者</el-tag>
+                    <el-tag v-if="comment.user._id === authorId" type="info" size="mini" effect="light">作者</el-tag>
                   </p>
-                  <p class="date">{{ parseDate(comment.commentTime) }}评论</p>
+                  <p class="date">{{ parseDate(comment.created_at) }}评论</p>
                 </div>
                 <p class="body-text" v-html="comment.content" />
                 <div class="btns-bar">
                   <el-popover
                     v-if="userInfo && (
-                      userInfo.id === comment.fromUser.id
-                      || userInfo.id === authorId
+                      userInfo._id === comment.user._id
+                      || userInfo._id === authorId
                       || userInfo.roles.includes('admin'))"
                     v-model="comment.del_visible"
                     placement="bottom"
@@ -47,31 +47,30 @@
                       <el-button style="color:#999;font-size: 12px;" size="mini" type="text" @click="comment.del_visible = false">取消</el-button>
                       <el-button style="font-size: 12px;" type="text" size="mini" @click="delCommentSubmit(comment)">确定</el-button>
                     </div>
-                    <span slot="reference" class="reply-btn">删除</span>
+                    <span slot="reference" class="reply-btn">reply</span>
                   </el-popover>
-                  <span class="reply-btn" @click="reClick(comment.id, comment.fromUser.id)">回复</span>
+                  <span class="reply-btn" @click="reClick(comment._id, comment.user._id)">回复</span>
                 </div>
 
-                <!-- 回复列表 -->
                 <ul class="reply-list">
-                  <li v-for="(reply, index2) in comment.replyList" :key="index2" class="reply-item">
-                    <div class="reply-date">{{ parseDate(reply.replyTime) }}回复</div>
+                  <li v-for="(reply, index2) in comment.reply" :key="index2" class="reply-item">
+                    <div class="reply-date">{{ parseDate(reply.created_at) }}回复</div>
                     <div class="reply-content">
                       <div class="headimg">
-                        <img :src="reply.fromUser.avatar || defaultAvatar">
+                        <img :src="reply.user.avatar || defaultAvatar">
                       </div>
                       <div class="nickname">
-                        <span :style="reply.fromUser.id === authorId ? 'color:#e74851' : ''">{{ reply.fromUser.nickname }}</span>
+                        <span :style="reply.user._id === authorId ? 'color:#e74851' : ''">{{ reply.user.username }}</span>
                         <span style="color: #000000;">回复</span>
-                        <span :style="reply.toUser.id === authorId ? 'color:#e74851' : ''">@{{ reply.toUser.nickname }}</span>
+                        <!-- <span :style="reply.user._id === authorId ? 'color:#e74851' : ''">@{{ reply.user.username }}</span> -->
                       </div>
                       <p class="reply-text" v-html="reply.content" />
                     </div>
                     <div class="btns-bar">
                       <el-popover
                         v-if="userInfo &&
-                          (userInfo.id === reply.fromUser.id
-                          || userInfo.id === authorId
+                          (userInfo._id === reply.user._id
+                          || userInfo._id === authorId
                           || userInfo.roles.includes('admin'))"
                         v-model="reply.del_visible"
                         placement="bottom"
@@ -79,11 +78,11 @@
                         <p style="margin: 8px;">确定删除这一条回复吗？</p>
                         <div style="text-align: right; margin: 0">
                           <el-button style="color:#999;font-size: 12px;" size="mini" type="text" @click="reply.del_visible = false">取消</el-button>
-                          <el-button style="font-size: 12px;" type="text" size="mini" @click="delReplySubmit(reply)">确定</el-button>
+                          <el-button style="font-size: 12px;" type="text" size="mini" @click="delReplySubmit(reply)">delete</el-button>
                         </div>
-                        <span slot="reference" class="reply-btn">删除</span>
+                        <span slot="reference" class="reply-btn">reply</span>
                       </el-popover>
-                      <span class="reply-btn" @click="reClick(comment.id, reply.fromUser.id)">回复</span>
+                      <span class="reply-btn" @click="reClick(comment._id, reply.user._id)">回复</span>
                     </div>
                   </li>
                 </ul>
@@ -94,13 +93,13 @@
         <div
           v-show="current === 1 && loading"
           v-loading="loading"
-          element-loading-text="拼命加载中"
+          element-loading-text="Processing"
           element-loading-spinner="el-icon-loading"
           element-loading-background="#fff"
           style="color: #fff;width: 100%;height: 100px;"
-        >正在加载</div>
+        >Setting</div>
       </div>
-      <div v-if="!loading && commentList.length === 0" class="list-empty">还没有评论哦~</div>
+      <div v-if="!loading && commentList.length === 0" class="list-empty">No Comment~</div>
     </div>
     <el-pagination
       background
@@ -112,7 +111,6 @@
       @current-change="currentChange"
     />
 
-    <!-- 回复弹框 -->
     <el-dialog
       :visible.sync="reEditVisible"
       title="提示"
@@ -136,7 +134,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { parseDate } from '@/utils/index.js'
+import moment from 'moment'
 import '@/assets/quill-emoji/quill-emoji.js'
 import { pageComment, addComment, addReply, deleteComment, deleteReply } from '@/api/comment.js'
 export default {
@@ -163,7 +161,7 @@ export default {
           'emoji-toolbar': true,
           'emoji-shortname': true
         },
-        placeholder: '嗨，你好呀,欢迎在评论区评论哦~'
+        placeholder: 'Please leave your comments'
       },
       reEditVisible: false,
       reEditorOption: {
@@ -197,18 +195,15 @@ export default {
 
   mounted() {
     this.pageComment()
+    console.log('authorId', this.authorId)
   },
 
   methods: {
 
-    // 日期转换
     parseDate(str) {
-      // 解决ios 日期NAN问题
-      str = str.replace(/-/g, '/')
-      return parseDate(new Date(str))
+      return moment(str).format('DD-MM-YYYY')
     },
 
-    // 回复弹框关闭事件
     bClose() {
       this.commentId = 0
       this.toUserId = 0
@@ -216,13 +211,11 @@ export default {
       this.recontent = ''
     },
 
-    // 监听分页
     currentChange(current) {
       this.current = current
       this.pageComment()
     },
 
-    // 获取分页数据
     pageComment() {
       this.loading = true
       const params = {
@@ -233,18 +226,26 @@ export default {
       pageComment(params).then(
         res => {
           this.loading = false
-          this.total = res.data.total
-          const commentList = res.data.records
-          const clen = commentList.length
+          this.total = res.total
+          let commentList
+          let clen
+          if (this.total === 0) {
+            commentList = []
+            clen = 0
+          } else {
+            commentList = res.data.comment
+            clen = commentList.length
+          }
           for (var i = 0; i < clen; i++) {
             commentList[i].del_visible = false
-            const replyList = commentList[i].replyList
-            const rlen = replyList.length
+            const reply = commentList[i].reply
+            const rlen = reply.length
             for (var j = 0; j < rlen; j++) {
-              replyList[j].del_visible = false
+              reply[j].del_visible = false
             }
           }
           this.commentList = commentList
+          console.log('commentList', this.commentList)
         },
         error => {
           console.error(error)
@@ -253,27 +254,27 @@ export default {
       )
     },
 
-    // 重载
     reload() {
       this.current = 1
       this.pageComment()
     },
 
-    // 评论提交
     commentSubmit() {
       const userInfo = this.userInfo
+      console.log('comment userInfo', this.userInfo)
       if (!userInfo) {
         this.$store.commit('login/CHANGE_VISIBLE', true)
         return
       }
       const content = this.content.replace(/<\/?p[^>]*>/gi, '')
       if (!content) {
-        this.$message('还没输入内容呢~')
+        this.$message('please input content')
         return
       }
       const params = {
-        content: content,
-        articleId: this.articleId
+        userId: this.userInfo._id,
+        articleId: this.articleId,
+        content: content
       }
       const email = userInfo.email
       if (!email) {
@@ -290,7 +291,7 @@ export default {
             res => {
               this.cloading = false
               this.$message({
-                message: '评论成功',
+                message: 'send successfully',
                 type: 'success'
               })
               this.content = ''
@@ -308,7 +309,7 @@ export default {
           res => {
             this.cloading = false
             this.$message({
-              message: '评论成功',
+              message: 'send successfully',
               type: 'success'
             })
             this.content = ''
@@ -322,13 +323,12 @@ export default {
       }
     },
 
-    // 删除评论提交
     delCommentSubmit(comment) {
       const params = { commentId: comment.id }
       deleteComment(params).then(
         res => {
           this.$message({
-            message: '删除成功',
+            message: 'delete successfully',
             type: 'success'
           })
           this.reload()
@@ -336,13 +336,12 @@ export default {
       )
     },
 
-    // 删除回复提交
     delReplySubmit(reply) {
       const params = { replyId: reply.id }
       deleteReply(params).then(
         res => {
           this.$message({
-            message: '删除成功',
+            message: 'delete successfully',
             type: 'success'
           })
           this.reload()
@@ -350,7 +349,6 @@ export default {
       )
     },
 
-    // 点击回复
     reClick(commentId, toUserId) {
       const userInfo = this.userInfo
       if (!userInfo) {
@@ -362,11 +360,10 @@ export default {
       this.toUserId = toUserId
     },
 
-    // 回复提交
     reSubmit() {
       const content = this.recontent.replace(/<\/?p[^>]*>/gi, '')
       if (!content) {
-        this.$message('还没输入内容呢~')
+        this.$message('please input content')
         return
       }
 
@@ -393,7 +390,7 @@ export default {
               this.reEditVisible = false
               this.recontent = ''
               this.$message({
-                message: '回复成功',
+                message: 'send successfully',
                 type: 'success'
               })
               this.reload()
@@ -412,7 +409,7 @@ export default {
             this.reEditVisible = false
             this.recontent = ''
             this.$message({
-              message: '回复成功',
+              message: 'send successfully',
               type: 'success'
             })
             this.reload()

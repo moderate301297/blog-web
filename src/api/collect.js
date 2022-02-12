@@ -4,8 +4,12 @@ import request from '@/utils/request'
  * @description
  * @param {Object} articleId
  */
-export function isCollected(articleId) {
-  return request.get(`/article/collect/collected/${articleId}`)
+export function isCollected(articleId, access_token) {
+  return request({
+    url: '/article/collect/collected',
+    method: 'get',
+    params: { articleId, access_token }
+  })
 }
 
 /**

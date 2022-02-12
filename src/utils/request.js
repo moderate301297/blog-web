@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
-// import store from '@/store'
-// import { getAccessToken } from '@/utils/auth'
+import store from '@/store'
+import { getAccessToken } from '@/utils/auth'
 
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API,
@@ -11,9 +11,9 @@ const service = axios.create({
 
 service.interceptors.request.use(
   config => {
-    // if (store.getters.token) {
-    //   config.headers['Authorization'] = 'Bearer ' + getAccessToken()
-    // }
+    if (store.getters.token) {
+      config.headers['Authorization'] = 'Bearer ' + getAccessToken()
+    }
     return config
   },
   error => {

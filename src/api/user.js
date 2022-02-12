@@ -48,11 +48,11 @@ export function getUserInfo(token) {
  */
 export function logout(params) {
   return request({
-    url: '/logout',
+    url: 'users/logout',
     headers: {
       'Authorization': 'Basic cGM6MTIzNDU2'
     },
-    method: 'delete',
+    method: 'post',
     params: params
   })
 }
@@ -70,7 +70,8 @@ export function register(data) {
  * @param {Object} data
  */
 export function updateUser(data) {
-  return request.post('/users/update', data)
+  console.log('updateUser ', data)
+  return request.post('/users/update/' + data.userId, data)
 }
 
 /**
